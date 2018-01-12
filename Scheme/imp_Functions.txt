@@ -1,0 +1,6 @@
+1) Common Ansestor
+2) Distance between 2 nodes in given bst
+3) distance from root to given node
+4) distance from given node to farthest element from given node
+5) Diameter of a binary tree
+6) 

@@ -1,0 +1,46 @@
+(define makeEmpty-bst '())
+(define (make-bst bstVal bstLs bstRs) (list bstVal bstLs bstRs))
+(define (get-bstVal bst) (car bst))
+(define (get-bstLs bst) (cadr bst))
+(define (get-bstRs bst) (caddr bst))
+(define (isEmpty-bst? bst) (null? bst))
+
+(define (isMember-bst? bstVal bst)
+  (cond ((isEmpty-bst? bst) #f)
+        ((= bstVal (get-bstVal bst)) #t)
+        ((< bstVal (get-bstVal bst)) (isMember-bst? bstVal (get-bstLs bst)))
+        ((> bstVal (get-bstVal bst)) (isMember-bst? bstVal (get-bstRs bst)))))
+
+(define (isLeaf? bst)
+ (and (isEmpty-bst? (get-bstLs bst))
+      (isEmpty-bst? (get-bstRs bst))))
+
+(define (getSize-bst bst)
+ (if (isEmpty-bst? bst)
+     0
+     (+ 1 (getSize-bst (get-bstLs bst)) 
+          (getSize-bst (get-bstRs bst)))))
+
+(define (countLeaves bst)
+ (cond ((isEmpty-bst? bst) 0)
+       ((isLeaf? bst) 1)
+       (else (+ (countLeaves (get-bstLs bst)) 
+	        (countLeaves (get-bstRs bst))))))
+
+(define (bstInsert bstVal bst)
+ (cond ((isEmpty-bst? bst) (make-bst bstVal makeEmpty-bst makeEmpty-bst))
+       ((= bstVal (get-bstVal bst)) bst)
+       ((< bstVal (get-bstVal bst)) (make-bst (get-bstVal bst)
+	                                      (bstInsert bstVal (get-bstLs bst))
+					      (get-bstRs bst)))
+       ((> bstVal (get-bstVal bst)) (make-bst (get-bstVal bst)
+	                                      (get-bstLs bst)
+					      (bstInsert bstVal (get-bstRs bst))))))
+
+(define (bstHeight bst)
+ (cond ((isEmpty-bst? bst) 0)
+       (else (+ 1 (max (bstHeight (get-bstLs bst))
+	               (bstHeight (get-bstRs bst)))))))
+
+;(isMember-bst? 8 '(10 (7 () ()) (11 () ())))
+;  (bstInsert 8 '(10 (7 (6 () ()) (8 () ())) (12 (11 () ()) (13 () ()))))
